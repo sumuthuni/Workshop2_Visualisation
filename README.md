@@ -1,1 +1,170 @@
 # Workshop2_Visualisation
+---
+title: "Introduction_Visualisation"
+author: "sumuthuni"
+date: "2026-06-21"
+output: html_document
+---
+#introduction
+``This workshop contains code and output forthe data visualisation in workshop 2. this will help to get the graph for inserting to the reputed journals. 
+#Load package and data
+{r} library(tidyverse)
+
+#look at the dat frame by typing mpg
+``mpg
+#Know about this data set
+?mpg
+#Creating first ggplot
+`graph1<-`ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))
+
+#save the graph1
+  ggsave("output/graph1.png", plot = graph1)
+#Adding one more layers to ggplot()..#this will create the empty graph...
+  
+  #Aesthetic mappings
+  ``graph2<- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy, colour = class))..
+ #save the graph2
+ ggsave("output/graph2.png", plot = graph2)
+ 
+#understand the 'grammer of the graphics'
+#Aesthetic mapping
+``making properties manually by offering a number or a color
+
+#graph3 <- ggplot(data = mpg) 
++ geom_point(mapping = aes(x = displ, y = hwy))...
+#save graph3
+ggsave("output/graph3.png", plot = graph3)
+# graph4 <- ggplot(data = mpg) + 
++     geom_point(mapping = aes(x = displ, y = hwy), color = "blue")
+> ggsave("output/graph4.png", plot = graph4)
+
+#troubleshooting
+ggplot(data = mpg) 
++ geom_point(mapping = aes(x = displ, y = hwy)) #error code
+# the + should be on top line
+ggplot(data=mpg) +
+geom_point(mapping = aes(x = displ, y = hwy))
+
+
+#Facet and panel plots
+graph6 <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_wrap(~ class, nrow = 2)
+#save the graph 6
+ggsave("output/graph6.png", plot = graph6)
+
+#facet_grid()
+graph8<- ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy)) + 
+  facet_grid(drv ~ cyl)
+#save the graph 
+ggsave("output/graph8.png", plot = graph8)
+
+#To display data as points, use 
+geom_smooth()
+
+# Fitting simple lines
+graph9 <- ggplot(data = mpg) + 
+  geom_smooth(mapping = aes(x = displ, y = hwy, linetype = drv))
+  # Print (graph9)
+  
+  #change the colour
+  graph 10 <- ggplot(data = mpg) +
+  geom_smooth(
+    mapping = aes(x = displ, y = hwy, color = drv),
+    show.legend = FALSE,
+  )
+# print (10)
+ggsave ("output/graph10.png", plot = graph10)
+
+#print (11)
+graph11 <- ggplot(data = mpg) + 
+  geom_point(mapping = aes(xx = displ, y = hwy)) +
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+#ggsave ("output/graph11.png", plot = graph11)
+
+
+# use a filter (class = "subcompact") to select a subset of the data and plot only that subset....
+
+graph12 <- ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point(mapping = aes(color = class)) + 
+  geom_smooth(data = filter(mpg, class == "subcompact"), se = FALSE)
+ #ggsave ("output/graph12.png", plot = graph12) 
+#exercise:
+#1 What geom would you use to draw a line chart? A boxplot? A histogram? An area chart? geom_line , geom_boxplot and geom_histogram
+#creating a Histogam
+graph13 <- ggplot(data = mpg) +
+  geom_histogram(
+    mapping = aes(x = displ),
+    bins = 20
+  ) +
+  labs(
+    title = "Distribution of Engine Displacement",
+    x = "Engine Displacement (L)",
+    y = "Frequency"
+  )
+#ggsave ("output/graph13.png", plot = graph13)
+#creating Boxpolot
+#graph14 <- ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(x = class, y = hwy))
+#ggsave ("output/graph14.png", plot = graph14)
+
+# creating an area chart
+graph15 <- ggplot(data = mpg) +
+  geom_area(
+    mapping = aes(x = displ),
+    stat = "bin"
+  ) 
+# ggsave ("output/graph15.png", plot = graph15) 
+
+#creating line chart
+#graph16 <- ggplot(data = mpg, aes(x = year, y = value)) +
+  geom_line()
+  
+#print(graph16)
+#ggsave ("output/graph16.png", plot = graph16) 
+
+
+#Run this code in your head and predict what the output will look like. Then, run the code in R and check your predictions. Will these two graphs look different? Why/why not? 
+# [Answer] No. The graphs are identical because both geom_point() and geom_smooth() use the same dataset (mpg) and the same aesthetic mapping (x = displ, y = hwy). In the first code, the mapping is defined once in ggplot() and inherited by both layers. In the second code, the mapping is defined separately for each layer, but it is the same, so the resulting graph is identical. 
+
+# overriding defaults in ggplot2
+demo <- tribble(
+  ~cut,         ~freq,
+  "Fair",       1610,
+  "Good",       4906,
+  "Very Good",  12082,
+  "Premium",    13791,
+  "Ideal",      21551
+)
+demo
+
+graph17 <- ggplot(data = demo) +
+  geom_bar(mapping = aes(x = cut, y = freq), stat = "identity")
+
+# ggsave ("output/graph17.png", plot = graph17)
+
+#Plotting statistical details
+``using stat_summary()
+# graph18 <- ggplot(data = diamonds) + 
+  stat_summary(
+    mapping = aes(x = cut, y = depth),
+    fun.min = min,
+    fun.max = max,
+    fun = median
+  )
+
+
+#Aesthetic adjustments
+``` ggplot2 is to use aesthetics like colour or fill to change aspects of bar colours...
+``using these aesthetics to colour by another variable like clarity. Notice how the stacking is done automatically..
+##To alter transparency (alpha)
+##To color the bar outlines with no fill color
+``ggplot(data = diamonds, mapping = aes(x = cut, colour = clarity)) + 
+  geom_bar(fill = NA, position = "identity")...
+  
+#position = "dodge" places overlapping objects directly beside one another
+
+#position = "jitter" adds a small amount of random noise..
