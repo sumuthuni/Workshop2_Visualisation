@@ -1,0 +1,6 @@
+---
+title: "Fundamental programming_ workshop2"
+author: "sumuthuni"
+date: "2026-08-16"
+output: html_document
+---
